@@ -1,0 +1,131 @@
+<html>
+<head>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div id="app">
+  <vue2-org-tree :data="data"
+                 :horizontal="horizontal"
+                 :collapsable="collapsible"
+                 :label-class-name="labelClassName"
+                 :render-content="renderContent"
+                 @drag-drop="dragDrop"
+                 @on-expand="onExpand"
+                 @on-node-click="onNodeClick"></vue2-org-tree>
+</div>
+
+<script src="https://unpkg.com/vue@2.5.17/dist/vue.js"></script>
+<script src="index.js"></script>
+<script>
+  new Vue({
+    data: () => ({
+      data: {
+        id: 0,
+        label: '1',
+        children: [{
+          id: 2,
+          label: '2',
+          children: [{
+            id: 5,
+            label: '5'
+          }, {
+            id: 6,
+            label: '6'
+          }, {
+            id: 9,
+            label: '9'
+          }, {
+            id: 10,
+            label: '10'
+          }]
+        }, {
+          id: 3,
+          label: '3',
+          children: [{
+            id: 7,
+            label: '7'
+          }, {
+            id: 8,
+            label: '8'
+          }]
+        }, {
+          id: 4,
+          label: '4'
+        }, {
+          id: 9,
+          label: '9'
+        }]
+      },
+      horizontal: false,
+      collapsible: true,
+      labelClassName: 'bg-white'
+    }),
+    methods: {
+      renderContent: function (h, data) {
+        return data.label
+      },
+      onExpand: function (data) {
+        if ('expand' in data) {
+          data.expand = !data.expand;
+          if (!data.expand && data.children) {
+            this.collapse(data.children)
+          }
+        } else {
+          this.$set(data, 'expand', true)
+        }
+      },
+      onNodeClick: function (e, data) {
+        alert(data.label)
+      },
+      collapse: function (list) {
+        var _this = this;
+        list.forEach(function (child) {
+          if (child.expand) {
+            child.expand = false
+          }
+          child.children && _this.collapse(child.children)
+        })
+      },
+      dragDrop: function (x) {
+        if (x) {
+          if (this.data.id === x.item.id) {
+            this.data = {}; // WAH
+          } else {
+            this.deleteOldItem(this.data.children || [], x);
+          }
+          if (this.data.id === x.parent) {
+            this.data.children.push({...x.item});
+          } else {
+            this.moveToNewParent(this.data.children || [], x);
+          }
+        }
+      },
+      deleteOldItem: function (c, x) {
+        if (c.length > 0) {
+          c.forEach((k, i) => {
+            if (k.id === x.item.id) {
+              delete c[i];
+            } else if (k && k.children && k.children.length > 0) {
+              this.deleteOldItem(k.children, x);
+            }
+          })
+        }
+      },
+      moveToNewParent: function (c, x) {
+        if (c.length > 0) {
+          c.forEach(k => {
+            if (k.id === x.parent) {
+              k.children.push({...x.item});
+            } else if (k && k.children) {
+              this.moveToNewParent(k.children, x);
+            }
+          })
+        }
+      }
+    }
+  }).$mount(`#app`);
+
+</script>
+</body>
+</html>
