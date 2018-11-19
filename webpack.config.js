@@ -4,7 +4,7 @@ const pkg = require('./package.json')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
-const styleLoader = function(options) {
+const styleLoader = function (options) {
   var options = options || {}
   var cssLoader = {
     loader: 'css-loader',
@@ -15,7 +15,7 @@ const styleLoader = function(options) {
     sourceMap: options.sourceMap
   }
 
-  function generateLoaders (loader, loaderOptions) {
+  function generateLoaders(loader, loaderOptions) {
     const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
 
     if (loader) {
@@ -65,7 +65,7 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -132,8 +132,8 @@ if (isProduction) {
     }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: isProduction
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
+        ? {safe: true, map: {inline: false}}
+        : {safe: true}
     })
   ])
 }

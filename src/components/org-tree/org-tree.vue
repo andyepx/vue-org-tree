@@ -1,12 +1,12 @@
 <template>
   <div class="org-tree-container">
-    <div class="org-tree" :class="{horizontal, collapsable}">
+    <div class="org-tree" :class="{horizontal, collapsible}">
       <org-tree-node
         :data="data"
         :props="props"
         :horizontal="horizontal"
         :label-width="labelWidth"
-        :collapsable="collapsable"
+        :collapsible="collapsible"
         :render-content="renderContent"
         :label-class-name="labelClassName"
         @on-expand="$emit('on-expand', $event)"
@@ -17,38 +17,38 @@
 </template>
 
 <script>
-import render from './node'
+  import render from './node'
 
-export default {
-  name: 'Vue2OrgTree',
-  components: {
-    OrgTreeNode: {
-      render,
-      functional: true
-    }
-  },
-  props: {
-    data: {
-      type: Object,
-      required: true
+  export default {
+    name: 'Vue2OrgTree',
+    components: {
+      OrgTreeNode: {
+        render,
+        functional: true
+      }
     },
     props: {
-      type: Object,
-      default: () => ({
-        label: 'label',
-        expand: 'expand',
-        children: 'children'
-      })
-    },
-    horizontal: Boolean,
-    collapsable: Boolean,
-    renderContent: Function,
-    labelWidth: [String, Number],
-    labelClassName: [Function, String]
+      data: {
+        type: Object,
+        required: true
+      },
+      props: {
+        type: Object,
+        default: () => ({
+          label: 'label',
+          expand: 'expand',
+          children: 'children'
+        })
+      },
+      horizontal: Boolean,
+      collapsible: Boolean,
+      renderContent: Function,
+      labelWidth: [String, Number],
+      labelClassName: [Function, String]
+    }
   }
-}
 </script>
 
 <style lang="less">
-@import '../../styles/org-tree';
+  @import '../../styles/org-tree';
 </style>
